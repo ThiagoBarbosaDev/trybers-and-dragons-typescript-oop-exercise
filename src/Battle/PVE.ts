@@ -33,8 +33,8 @@ export default class PVE extends Battle {
     while (this.shouldStartNewTurn()) {
       this.handlePlayerTurn();
       this.enemyGroup.forEach((enemy) => enemy.attack(this.player));
-      console.log('--------- Turn Ends ----------');
-      console.log(`${this.player.lifePoints > 0 ? 'PLAYER' : 'ENEMIES'} wins!`);
+      // console.log('--------- Turn Ends ----------');
+      // console.log(`${this.player.lifePoints > 0 ? 'PLAYER' : 'ENEMIES'} wins!`);
     }
     return this.player.lifePoints > 0 ? 1 : -1;
   }

@@ -17,8 +17,8 @@ export default class PVP extends Battle {
       this.enemy.attack(this.player);
       // if (this.enemy.lifePoints < 0) { return -1; }
       // console.log(this.player.lifePoints);
-      console.log('--------- Turn Ends ----------');
-      console.log(`${this.player.lifePoints > 0 ? 'PLAYER' : 'ENEMY'} wins!`);
+      // console.log('--------- Turn Ends ----------');
+      // console.log(`${this.player.lifePoints > 0 ? 'PLAYER' : 'ENEMY'} wins!`);
     }
     return this.player.lifePoints > 0 ? 1 : -1;
   }

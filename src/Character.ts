@@ -43,8 +43,8 @@ export default class Character implements Fighter {
     } as Energy;
   }
 
-  get race():string {
-    return this._race;
+  get race():IRace {
+    return this._raceInstance;
   }
 
   get archetype():string {
@@ -61,10 +61,6 @@ export default class Character implements Fighter {
 
   get lifePoints():number {
     return this._lifePoints;
-  }
-
-  set lifePoints(payload: number) {
-    this._lifePoints = payload;
   }
 
   get strength():number {
@@ -110,15 +106,15 @@ export default class Character implements Fighter {
 
   receiveDamage(attackPoints: number): number {
     const damage = attackPoints - this._defense;
-    if (damage > 0) { this.lifePoints -= damage; }
-    if (this.lifePoints < 0) { this.lifePoints = -1; }
+    if (damage > 0) { this._lifePoints -= damage; }
+    if (this.lifePoints < 0) { this._lifePoints = -1; }
     console.log(`${this.name} takes ${damage} damage,\
 and has ${this.lifePoints} lifepoints left`);
     return this.lifePoints;
   }
 
   attack(target: Fighter | SimpleFighter): void {
-    const damage = this.strength + 10;
+    const damage = this.strength;
     target.receiveDamage(damage);
   }
 
@@ -131,6 +127,10 @@ and has ${this.lifePoints} lifepoints left`);
     // ];
     // como fazer isso num forEach?
     this.maxLifePoints += getRandomInt(1, 10);
+    if (this.maxLifePoints > this._raceInstance.maxLifePoints) { 
+      this.maxLifePoints = this._raceInstance.maxLifePoints;
+    }
+    this._lifePoints = this.maxLifePoints;
     this.strength += getRandomInt(1, 10);
     this.defense += getRandomInt(1, 10);
     this.dexterity += getRandomInt(1, 10);
