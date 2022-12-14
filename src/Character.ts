@@ -6,8 +6,8 @@ import getRandomInt from './utils';
 
 type IArchetype = (Mage | Necromancer | Warrior | Ranger);
 type IRace = (Orc | Elf | Halfling | Dwarf);
-const archetypes = { Mage, Necromancer, Warrior, Ranger };
 
+const archetypes = { Mage, Necromancer, Warrior, Ranger };
 const races = { Orc, Elf, Halfling, Dwarf };
 
 export default class Character implements Fighter {
@@ -43,73 +43,32 @@ export default class Character implements Fighter {
     } as Energy;
   }
 
-  get race():IRace {
-    return this._raceInstance;
-  }
-
-  get archetype():string {
-    return this._archetype;
-  }
-
-  get maxLifePoints():number {
-    return this._maxLifePoints;
-  }
-
-  set maxLifePoints(payload: number) {
-    this._maxLifePoints = payload;
-  }
-
-  get lifePoints():number {
-    return this._lifePoints;
-  }
-
-  get strength():number {
-    return this._strength;
-  }
-
-  private set strength(payload: number) {
-    this._strength = payload;
-  }
-
-  get defense():number {
-    return this._defense;
-  }
-
-  private set defense(payload: number) {
-    this._defense = payload;
-  }
-  
-  get dexterity():number {
-    return this._dexterity;
-  }
-
-  private set dexterity(payload: number) {
-    this._dexterity = payload;
-  }
-
-  get energy():Energy {
-    return {
-      type_: this._energy.type_,
-      amount: this._energy.amount,
-    };
-  }
-
+  get race():IRace { return this._raceInstance; }
+  get archetype():string { return this._archetype; }
+  get maxLifePoints():number { return this._maxLifePoints; }
+  get lifePoints():number { return this._lifePoints; }
+  get strength():number { return this._strength; }
+  get defense():number { return this._defense; }
+  get dexterity():number { return this._dexterity; }
+  get energy():Energy { return this._energy; }
   // get energy():Energy {
-  //   return this._energy;
+  //   return {
+  //     type_: this._energy.type_,
+  //     amount: this._energy.amount,
+  //   };
   // }
-  // pq esse getter não passa no teste
-
-  // private set energy(payload: number) {
-  //   this.energy = { type_: this._energy.type_, amount: payload };
-  // }
-  // pq esse setter está dando problema?
 
   receiveDamage(attackPoints: number): number {
     const damage = attackPoints - this._defense;
-    if (damage > 0) { this._lifePoints -= damage; }
+    if (damage > 0) { 
+      this._lifePoints -= damage; 
+    } else {
+      this._lifePoints -= 1;
+    }
     if (this.lifePoints < 0) { this._lifePoints = -1; }
-    console.log(`${this.name} takes ${damage} damage,\
-and has ${this.lifePoints} lifepoints left`);
+    console.log(
+      `${this.name} takes ${damage} damage, has ${this.lifePoints} lifepoints`,
+    );
     return this.lifePoints;
   }
 
@@ -118,23 +77,28 @@ and has ${this.lifePoints} lifepoints left`);
     target.receiveDamage(damage);
   }
 
+  // levelUp(): void {
+  //   this._maxLifePoints += getRandomInt(1, 10);
+  //   if (this.maxLifePoints > this._raceInstance.maxLifePoints) { 
+  //     this._maxLifePoints = this._raceInstance.maxLifePoints;
+  //   }
+  //   this._lifePoints = this.maxLifePoints;
+  //   this._strength += getRandomInt(1, 10);
+  //   this._defense += getRandomInt(1, 10);
+  //   this._dexterity += getRandomInt(1, 10);
+  //   this._energy.amount = 10;
+  // }
+
   levelUp(): void {
-    // const statsToIncrement = [
-    //   this.maxLifePoints,
-    //   this.strength,
-    //   this.defense,
-    //   this.dexterity,
-    // ];
-    // como fazer isso num forEach?
-    this.maxLifePoints += getRandomInt(1, 10);
-    if (this.maxLifePoints > this._raceInstance.maxLifePoints) { 
-      this.maxLifePoints = this._raceInstance.maxLifePoints;
-    }
-    this._lifePoints = this.maxLifePoints;
-    this.strength += getRandomInt(1, 10);
-    this.defense += getRandomInt(1, 10);
-    this.dexterity += getRandomInt(1, 10);
-    this._energy.amount = 10;
+    const statsToIncrement = [
+      this._maxLifePoints,
+      this._strength,
+      this._defense,
+      this._dexterity,
+    ];
+    statsToIncrement.forEach((stat) => {
+      stat += getRandomInt(1, 10);
+    });
   }
 
   special?(enemy: Fighter): void;
@@ -144,8 +108,3 @@ and has ${this.lifePoints} lifepoints left`);
     return `O personagem ${name} tem energia do tipo: ${energyType}`;
   }
 }
-
-// const newChar = new Character('Murlok', 'Mage', 'Elf');
-// console.log(newChar);
-// newChar.levelUp();
-// console.log(newChar.energy);
